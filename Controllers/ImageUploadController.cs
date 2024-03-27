@@ -24,6 +24,7 @@ namespace SurveyApp.Controllers
 
                     // Dosyayı wwwroot/img klasörüne kaydet
                     string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", fileName);
+
                     System.IO.File.WriteAllBytes(filePath, imageBytes);
 
                     // İşlemin başarılı olduğunu bildir

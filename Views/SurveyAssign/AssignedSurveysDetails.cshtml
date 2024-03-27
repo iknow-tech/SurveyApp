@@ -32,78 +32,270 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                    @foreach (var question in Model.Survey.Questions)
+
+                    @if (User.IsInRole("ADMIN"))
                     {
-                        <tr>
-                            <td>@question.Name</td>
-                            <td>
+                        @foreach (var question in Model.Survey.Questions)
+                        {
+                            <tr>
+                                <td>@question.Name</td>
+                                <td>
 
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" value="true" name="QuestionAnswers[@question.Id]" id="flexRadioDefault1-@question.Id"
-                                           @(question.Answers.FirstOrDefault().isSuccess ? "checked" : "")>
-                                    <label class="form-check-label" for="flexRadioDefault1-@question.Id">
-                                        Evet
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" value="false" name="QuestionAnswers[@question.Id]" id="flexRadioDefault2-@question.Id"
-                                           @(question.Answers.FirstOrDefault().isSuccess ? "" : "checked")>
-                                    <label class="form-check-label" for="flexRadioDefault2-@question.Id">
-                                        Hayır
-                                    </label>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="text-end">
-                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@question.Id">
-                                        Düzenle
-                                    </button>
-                                </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="true" name="QuestionAnswers[@question.Id]" id="flexRadioDefault1-@question.Id"
+                                               @(question.Answers.FirstOrDefault().isSuccess ? "checked" : "")>
+                                        <label class="form-check-label" for="flexRadioDefault1-@question.Id">
+                                            Evet
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="false" name="QuestionAnswers[@question.Id]" id="flexRadioDefault2-@question.Id"
+                                               @(question.Answers.FirstOrDefault().isSuccess ? "" : "checked")>
+                                        <label class="form-check-label" for="flexRadioDefault2-@question.Id">
+                                            Hayır
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@question.Id">
+                                            Düzenle
+                                        </button>
+                                    </div>
 
-                                <!-- Modal -->
-                                <div class="modal fade" id="staticBackdrop-@question.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@question.Id" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="staticBackdropLabel-@question.Id">Uygunsuzluk Bildir</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div id="cameraContainer-@question.Id" class="camera-container">
-                                                    <input id="capturedPhotoHidden-@question.Id" type="hidden" name="QuestionPhotos[@question.Id]" value="@(question.Answers?.FirstOrDefault()?.Photo == null ? "":@question.Answers?.FirstOrDefault()?.Photo)" />
-                                                    <img id="capturedPhoto-@question.Id" src="@(question.Answers?.FirstOrDefault()?.Photo == null ? "" : @question.Answers?.FirstOrDefault()?.Photo)" style="@(question.Answers?.FirstOrDefault()?.Photo == null ? "display: none;" : "")" alt="Captured Photo">
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="staticBackdrop-@question.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@question.Id" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="staticBackdropLabel-@question.Id">Uygunsuzluk Bildir</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <button type="button" class="btn btn-primary" id="openCameraBtn-@question.Id">Kamerayı Aç</button>
-                                                <button type="button" class="btn btn-primary" id="takePhotoBtn-@question.Id">Fotoğraf Çek</button>
-                                                <div class="mt-5">
-                                                    <label for="description-@question.Id" class="form-label">Açıklama</label>
-                                                    <textarea class="form-control" id="description-@question.Id" placeholder="Enter description..."></textarea>
-                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="cameraContainer-@question.Id" class="camera-container">
+                                                        <input id="capturedPhotoHidden-@question.Id" type="hidden" name="QuestionPhotos[@question.Id]" value="@(question.Answers?.FirstOrDefault()?.Photo == null ? "":@question.Answers?.FirstOrDefault()?.Photo)" />
+                                                        <img id="capturedPhoto-@question.Id" src="@(question.Answers?.FirstOrDefault()?.Photo == null ? "" : @question.Answers?.FirstOrDefault()?.Photo)" style="@(question.Answers?.FirstOrDefault()?.Photo == null ? "display: none;" : "")" alt="Captured Photo">
+                                                    </div>
+                                                    <button type="button" class="btn btn-primary" id="openCameraBtn-@question.Id">Kamerayı Aç</button>
+                                                    <button type="button" class="btn btn-primary" id="takePhotoBtn-@question.Id">Fotoğraf Çek</button>
+                                                    <div class="my-5">
+                                                        <label for="description-@question.Id" class="form-label">Açıklama</label>
+                                                        <textarea class="form-control" id="description-@question.Id" name="QuestionDescriptions[@question.Id]" placeholder="Açıklama giriniz...">@((question.Answers?.FirstOrDefault()?.Description == null ? "" : @question.Answers?.FirstOrDefault()?.Description))</textarea>
+                                                    </div>
 
-                                                <div class="form-floating">
-                                                    <select class="form-select" id="floatingSelect" name="QuestionUsers[@question.Id]" aria-label="Floating label select example">
-                                                        <option selected>@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.UserName</option>
-                                                        @foreach (var item in Model.AppUsers)
-                                                        {
-                                                            @if (item.Facility == Model.Survey.AppUsers.FirstOrDefault().Facility)
+                                                    <div class="form-floating">
+                                                        <select class="form-select" id="floatingSelect" name="QuestionUsers[@question.Id]" aria-label="Floating label select example">
+
+                                                            @if (Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault() == null)
                                                             {
-                                                                <option value="@item.Id">@item.UserName</option>
+                                                                <option value="@Model.Survey.AppUsers.FirstOrDefault().Id" selected>@Model.Survey.AppUsers.FirstOrDefault().UserName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.Id" selected>@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.UserName</option>
                                                             }
 
-                                                        }
-                                                    </select>
-                                                    <label for="floatingSelect">Atanacak kişiyi seçiniz.</label>
-                                                </div>
+                                                            @foreach (var item in Model.AppUsers)
+                                                            {
+                                                                @if (item.Facility == Model.Survey.AppUsers.FirstOrDefault().Facility)
+                                                                {
+                                                                    <option value="@item.Id">@item.UserName</option>
+                                                                }
 
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="understoodBtn-@question.Id">Tamam</button>
+                                                            }
+                                                        </select>
+                                                        <label for="floatingSelect">Atanacak kişiyi seçiniz.</label>
+                                                    </div>
+
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="understoodBtn-@question.Id">Tamam</button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        }
+                    }
+
+                    @if (!User.IsInRole("ADMIN"))
+                    {
+                        @if (Model.Survey.AppUsers.FirstOrDefault().UserName == User.Identity.Name)
+                        {
+                            @foreach (var question in Model.Survey.Questions)
+                            {
+                                <tr>
+                                    <td>@question.Name</td>
+                                    <td>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="true" name="QuestionAnswers[@question.Id]" id="flexRadioDefault1-@question.Id"
+                                                   @(question.Answers.FirstOrDefault().isSuccess ? "checked" : "")>
+                                            <label class="form-check-label" for="flexRadioDefault1-@question.Id">
+                                                Evet
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="false" name="QuestionAnswers[@question.Id]" id="flexRadioDefault2-@question.Id"
+                                                   @(question.Answers.FirstOrDefault().isSuccess ? "" : "checked")>
+                                            <label class="form-check-label" for="flexRadioDefault2-@question.Id">
+                                                Hayır
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="text-end">
+                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@question.Id">
+                                                Düzenle
+                                            </button>
+                                        </div>
+
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="staticBackdrop-@question.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@question.Id" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h1 class="modal-title fs-5" id="staticBackdropLabel-@question.Id">Uygunsuzluk Bildir</h1>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div id="cameraContainer-@question.Id" class="camera-container">
+                                                            <input id="capturedPhotoHidden-@question.Id" type="hidden" name="QuestionPhotos[@question.Id]" value="@(question.Answers?.FirstOrDefault()?.Photo == null ? "":@question.Answers?.FirstOrDefault()?.Photo)" />
+                                                            <img id="capturedPhoto-@question.Id" src="@(question.Answers?.FirstOrDefault()?.Photo == null ? "" : @question.Answers?.FirstOrDefault()?.Photo)" style="@(question.Answers?.FirstOrDefault()?.Photo == null ? "display: none;" : "")" alt="Captured Photo">
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary" id="openCameraBtn-@question.Id">Kamerayı Aç</button>
+                                                        <button type="button" class="btn btn-primary" id="takePhotoBtn-@question.Id">Fotoğraf Çek</button>
+                                                        <div class="my-5">
+                                                            <label for="description-@question.Id" class="form-label">Açıklama</label>
+                                                            <textarea class="form-control" id="description-@question.Id" name="QuestionDescriptions[@question.Id]" placeholder="Açıklama giriniz...">@((question.Answers?.FirstOrDefault()?.Description == null ? "" : @question.Answers?.FirstOrDefault()?.Description))</textarea>
+                                                        </div>
+
+                                                        <div class="form-floating">
+                                                            <select class="form-select" id="floatingSelect" name="QuestionUsers[@question.Id]" aria-label="Floating label select example">
+
+                                                                @if (Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault() == null)
+                                                                {
+                                                                    <option value="@Model.Survey.AppUsers.FirstOrDefault().Id" selected>@Model.Survey.AppUsers.FirstOrDefault().UserName</option>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <option value="@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.Id" selected>@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.UserName</option>
+                                                                }
+
+                                                                @foreach (var item in Model.AppUsers)
+                                                                {
+                                                                    @if (item.Facility == Model.Survey.AppUsers.FirstOrDefault().Facility)
+                                                                    {
+                                                                        <option value="@item.Id">@item.UserName</option>
+                                                                    }
+
+                                                                }
+                                                            </select>
+                                                            <label for="floatingSelect">Atanacak kişiyi seçiniz.</label>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="understoodBtn-@question.Id">Tamam</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+
+                        @if (Model.Survey.AppUsers.FirstOrDefault().UserName != User.Identity.Name)
+                        {
+                            @foreach (var question in Model.Survey.Questions)
+                            {
+
+                                @if (Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.UserName == User.Identity.Name)
+                                {
+                                    <tr>
+                                        <td>@question.Name</td>
+                                        <td>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value="true" name="QuestionAnswers[@question.Id]" id="flexRadioDefault1-@question.Id"
+                                                       @(question.Answers.FirstOrDefault().isSuccess ? "checked" : "")>
+                                                <label class="form-check-label" for="flexRadioDefault1-@question.Id">
+                                                    Evet
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" value="false" name="QuestionAnswers[@question.Id]" id="flexRadioDefault2-@question.Id"
+                                                       @(question.Answers.FirstOrDefault().isSuccess ? "" : "checked")>
+                                                <label class="form-check-label" for="flexRadioDefault2-@question.Id">
+                                                    Hayır
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-end">
+                                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@question.Id">
+                                                    Düzenle
+                                                </button>
+                                            </div>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="staticBackdrop-@question.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@question.Id" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5" id="staticBackdropLabel-@question.Id">Uygunsuzluk Bildir</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div id="cameraContainer-@question.Id" class="camera-container">
+                                                                <input id="capturedPhotoHidden-@question.Id" type="hidden" name="QuestionPhotos[@question.Id]" value="@(question.Answers?.FirstOrDefault()?.Photo == null ? "":@question.Answers?.FirstOrDefault()?.Photo)" />
+                                                                <img id="capturedPhoto-@question.Id" src="@(question.Answers?.FirstOrDefault()?.Photo == null ? "" : @question.Answers?.FirstOrDefault()?.Photo)" style="@(question.Answers?.FirstOrDefault()?.Photo == null ? "display: none;" : "")" alt="Captured Photo">
+                                                            </div>
+                                                            <button type="button" class="btn btn-primary" id="openCameraBtn-@question.Id">Kamerayı Aç</button>
+                                                            <button type="button" class="btn btn-primary" id="takePhotoBtn-@question.Id">Fotoğraf Çek</button>
+                                                            <div class="my-5">
+                                                                <label for="description-@question.Id" class="form-label">Açıklama</label>
+                                                                <textarea class="form-control" id="description-@question.Id" name="QuestionDescriptions[@question.Id]" placeholder="Açıklama giriniz...">@((question.Answers?.FirstOrDefault()?.Description == null ? "" : @question.Answers?.FirstOrDefault()?.Description))</textarea>
+                                                            </div>
+
+                                                            <div class="form-floating">
+                                                                <select class="form-select" id="floatingSelect" name="QuestionUsers[@question.Id]" aria-label="Floating label select example">
+
+                                                                    @if (Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault() == null)
+                                                                    {
+                                                                        <option value="@Model.Survey.AppUsers.FirstOrDefault().Id" selected>@Model.Survey.AppUsers.FirstOrDefault().UserName</option>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <option value="@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.Id" selected>@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.UserName</option>
+                                                                    }
+
+                                                                    @foreach (var item in Model.AppUsers)
+                                                                    {
+                                                                        @if (item.Facility == Model.Survey.AppUsers.FirstOrDefault().Facility)
+                                                                        {
+                                                                            <option value="@item.Id">@item.UserName</option>
+                                                                        }
+
+                                                                    }
+                                                                </select>
+                                                                <label for="floatingSelect">Atanacak kişiyi seçiniz.</label>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="understoodBtn-@question.Id">Tamam</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
                     }
                 </tbody>
             </table>
@@ -139,22 +331,54 @@
             imgElement.src = '/img/';
             imgElement.style.display = 'none';
 
-            // Kamera stream'ini almak için gerekli işlemler yapılır
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function (stream) {
-                    var video = document.createElement('video');
-                    video.setAttribute('id', 'cameraStream-@question.Id');
-                    video.srcObject = stream;
-                    document.getElementById('cameraContainer-@question.Id').appendChild(video);
-                    video.play();
-                    videoStream = stream; // Save reference to the stream
+            // Arka kamerayı bulmak için cihazdaki tüm kameraları listele
+            navigator.mediaDevices.enumerateDevices()
+                .then(function(devices) {
+                    var videoDevice = devices.find(function(device) {
+                        return device.kind === 'videoinput' && device.label.toLowerCase().includes('back');
+                    });
 
-                    document.getElementById('cameraContainer-@question.Id').style.display = 'flex';
-                    document.getElementById('openCameraBtn-@question.Id').disabled = true;
+                    if(videoDevice) {
+                        // Arka kamera bulundu, onu kullan
+                        navigator.mediaDevices.getUserMedia({ video: { deviceId: videoDevice.deviceId } })
+                            .then(function (stream) {
+                                openCameraStream(stream);
+                            })
+                            .catch(function (err) {
+                                console.error('Arka kamera açılamadı: ', err);
+                                // Arka kamera açılamazsa, ön kamerayı kullan
+                                openFrontCamera();
+                            });
+                    } else {
+                        // Arka kamera bulunamazsa, ön kamerayı kullan
+                        openFrontCamera();
+                    }
                 })
-                .catch(function (err) {
-                    console.error('Kamera açılamadı: ', err);
+                .catch(function(err) {
+                    console.error('Cihaz kameraları listelenirken bir hata oluştu: ', err);
                 });
+
+            function openFrontCamera() {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        openCameraStream(stream);
+                    })
+                    .catch(function (err) {
+                        console.error('Ön kamera açılamadı: ', err);
+                    });
+            }
+
+            function openCameraStream(stream) {
+                var video = document.createElement('video');
+                video.setAttribute('id', 'cameraStream-@question.Id');
+                video.srcObject = stream;
+                document.getElementById('cameraContainer-@question.Id').appendChild(video);
+                video.play();
+                videoStream = stream; // Stream referansını kaydet
+
+                document.getElementById('cameraContainer-@question.Id').style.display = 'flex';
+                document.getElementById('openCameraBtn-@question.Id').disabled = true;
+            }
         });
 
         // Modal kapatıldığında
@@ -192,7 +416,7 @@
 
             // Burada imageData'yı kullanarak isteği göndermek gerekiyor
             // Örneğin:
-            fetch('http://localhost:5231/ImageUpload', {
+            fetch('http://185.87.252.78/ImageUpload', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

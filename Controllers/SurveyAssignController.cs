@@ -127,6 +127,12 @@ namespace SurveyApp.Controllers
             else
             {
                 var surveys = context.SurveyStatuses.Include(s => s.Survey).Include(s => s.AppUser).Include(f => f.Facility).Where(s => s.AppUser.UserName == User.Identity.Name).ToList();
+
+                if (surveys.Count == 0)
+                {
+                    return RedirectToAction(nameof(WorkOrders));
+                }
+
                 surveyAssignedListModel.Surveys = surveys;
             }
 
@@ -214,6 +220,12 @@ namespace SurveyApp.Controllers
                 if (surveyAssignedModel.QuestionUsers.TryGetValue(item.Question.Id, out string? selectedUserId))
                 {
                     item.EmployeeId = selectedUserId;
+                    item.UpdatedTime = DateTime.Now;
+                }
+
+                if (surveyAssignedModel.QuestionDescriptions.TryGetValue(item.Question.Id, out string? description))
+                {
+                    item.Description = description;
                     item.UpdatedTime = DateTime.Now;
                 }
             }

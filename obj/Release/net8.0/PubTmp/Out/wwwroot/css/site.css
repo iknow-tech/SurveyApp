@@ -1,0 +1,49 @@
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+.table-big {
+    min-width: 800px;
+}
+
+.table-mid {
+    min-width: 600px;
+}
+
+#cameraContainer{
+    display: none;
+}
+
+.camera-container {
+    width: 100%;
+    height: calc(100vh - 350px); /* Modal height - (header + footer) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+    .camera-container video {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .camera-container img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }

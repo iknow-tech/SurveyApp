@@ -11,6 +11,7 @@ namespace SurveyApp.Models
         public Dictionary<int, bool>? QuestionAnswers { get; set; }
         public Dictionary<int, string>? QuestionPhotos { get; set; }
         public Dictionary<int, string>? QuestionUsers { get; set; }
+        public Dictionary<int, string>? QuestionDescriptions { get; set; }
 
         public DateTime CreatedTime { get; set; }
         public DateTime? UpdatedTime { get; set; }
