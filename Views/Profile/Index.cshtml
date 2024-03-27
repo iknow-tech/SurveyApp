@@ -1,0 +1,72 @@
+﻿@model UserEditModel
+
+<div class="mt-5 shadow rounded p-3 col-md-6 offset-md-3">
+    <h3 class="text-center">Profil Güncelleme Formu</h3>
+    <hr />
+    <form asp-controller="Profile" asp-action="Index" method="post">
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="UserName">
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label">Ad Soyad</label>
+            <input type="text" class="form-control" asp-for="FullName">
+        </div>
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">E-Posta</label>
+            <input type="email" class="form-control" asp-for="Email">
+        </div>
+        <div class="mb-3">
+            <label asp-for="PhoneNumber" class="form-label">Telefon Numarası</label>
+            <input type="text" class="form-control" asp-for="PhoneNumber">
+        </div>
+        <div class="mb-3 text-end">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#passwordChangeModal">
+                Parola Güncelle
+            </button>
+        </div>
+
+        <!-- Password Modal -->
+        <div class="modal fade" id="passwordChangeModal" tabindex="-1" aria-labelledby="passwordChangeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="passwordChangeModalLabel">Parola Güncelleme</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Yeni Parola</label>
+                            <input type="password" class="form-control" asp-for="Password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Vazgeç</button>
+                        <button type="submit" class="btn btn-primary">Kaydet</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </form>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="successModalLabel">İşlem Başarılı</h1>
+            </div>
+            <div class="modal-body">
+                Değişiklikler başarıyla güncellendi.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

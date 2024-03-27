@@ -1,0 +1,32 @@
+﻿@model IEnumerable<UserListModel>
+
+<div class="mt-5">
+    <div class="table-responsive">
+        <table class="table table-big">
+            <thead>
+                <tr>
+                    <th scope="col">Ad Soyad</th>
+                    <th scope="col">Kullanıcı Adı</th>
+                    <th scope="col">E-Posta</th>
+                    <th scope="col">Telefon</th>
+                    <th class="text-end"><a href="/users/create" class="btn btn-sm btn-success">Kullanıcı Ekle</a></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.FullName</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td>@user.PhoneNumber</td>
+                        <td class="text-end">
+                            <a href="/users/edit/@user.Id" class="btn btn-sm btn-primary">Düzenle</a>
+                            <a href="/users/delete/@user.Id" class="btn btn-sm btn-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿@model AccountLoginModel
+
+<div class="mt-5 shadow rounded p-3 col-md-6 offset-md-3">
+    <h3 class="text-center">Giriş Yap</h3>
+    <hr />
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <div class="text-danger" asp-validation-summary="All"></div>
+        <div class="mb-3">
+            <label asp-for="UserName" class="form-label">Kullanıcı Adı</label>
+            <input type="text" class="form-control" asp-for="UserName" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Parola</label>
+            <input type="password" class="form-control" asp-for="Password">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" asp-for="RememberMe">
+            <label class="form-check-label" asp-for="RememberMe">Beni Hatırla</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Giriş</button>
+    </form>
+</div>

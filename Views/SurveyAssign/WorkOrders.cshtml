@@ -1,0 +1,82 @@
+﻿@model WorkOrdersListModel
+
+
+
+<div class="mt-5">
+    <div class="accordion" id="accordionExample">
+        @foreach (var survey in Model.Surveys)
+        {
+            if (survey.Questions.Count != 0)
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne-@survey.Id" aria-expanded="true" aria-controls="collapseOne-@survey.Id">
+                            <h3>@survey.Name</h3>
+                        </button>
+                    </h2>
+                    <div id="collapseOne-@survey.Id" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            @foreach (var question in survey.Questions)
+                            {
+                                <div class="table-responsive my-5">
+                                    <table class="table table-striped table-big">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <h5>Soru: @question.Name</h5>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Denetleyici</th>
+                                                <th>Atanan</th>
+                                                <th>Tesis</th>
+                                                <th scope="col">
+                                                    Durum
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+
+                                            @foreach (var answer in question.Answers)
+                                            {
+
+                                                @if (User.IsInRole("ADMIN"))
+                                                {
+                                                    <tr>
+                                                        <td>@answer.AppUser.UserName</td>
+                                                        <td>@Model.AppUsers.Where(au => au.Id == answer.EmployeeId).FirstOrDefault()?.UserName</td>
+                                                        <td>@answer.AppUser.Facility.Name, @answer.AppUser.Facility.City, @answer.AppUser.Facility.Local</td>
+                                                        <td>@(answer.isSuccess == false ? "Geçmedi":"Geçti")</td>
+                                                        <td class="text-end">
+                                                            <a href="/surveyAssign/details/@survey.Id/user/@answer.AppUser.Id" class="btn btn-sm btn-primary">Görüntüle</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                                else
+                                                {
+                                                    if (answer.AppUser.UserName == User.Identity.Name || @Model.AppUsers.Where(au => au.Id == answer.EmployeeId).FirstOrDefault()?.UserName == User.Identity.Name)
+                                                    {
+                                                        <tr>
+                                                            <td>@answer.AppUser.UserName</td>
+                                                            <td>@Model.AppUsers.Where(au => au.Id == answer.EmployeeId).FirstOrDefault()?.UserName</td>
+                                                            <td>@answer.AppUser.Facility.Name, @answer.AppUser.Facility.City, @answer.AppUser.Facility.Local</td>
+                                                            <td>@(answer.isSuccess == false ? "Geçmedi":"Geçti")</td>
+                                                            <td class="text-end">
+                                                                <a href="/surveyAssign/details/@survey.Id/user/@answer.AppUser.Id" class="btn btn-sm btn-primary">Görüntüle</a>
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

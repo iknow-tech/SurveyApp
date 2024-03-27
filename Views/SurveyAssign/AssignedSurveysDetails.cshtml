@@ -1,0 +1,242 @@
+﻿@model SurveyAssignedModel
+
+<form asp-action="AssignedSurveysDetailsEdit" asp-controller="SurveyAssign" method="post">
+
+    <input type="hidden" name="SurveyId" value="@Model.Survey.Id" />
+    <input type="hidden" name="UserId" value="@Model.Survey.AppUsers.FirstOrDefault().Id" />
+
+    <div class="mt-5 col-md-8 offset-md-2">
+        <h3>Denetim Adı: @Model.Survey.Name</h3>
+
+        <div>
+            <h5>Denetleyici: @Model.Survey.AppUsers.FirstOrDefault().UserName - @Model.Survey.AppUsers.FirstOrDefault().FullName</h5>
+            <h6>Tesis: @Model.Survey.AppUsers.FirstOrDefault().Facility.Name, @Model.Survey.AppUsers.FirstOrDefault().Facility.City, @Model.Survey.AppUsers.FirstOrDefault().Facility.Local</h6>
+            <h6>Atanma tarihi: @Model.CreatedTime</h6>
+            @if (Model.UpdatedTime != null)
+            {
+                <h6>Güncellenme tarihi: @Model.UpdatedTime</h6>
+            }
+
+            @if (Model.CompletedTime != null)
+            {
+                <h6>Tamamlanma tarihi: @Model.CompletedTime</h6>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped table-big">
+                <thead>
+                    <tr>
+                        <th scope="col">Sorular</th>
+                        <th scope="col">Kontrol</th>
+                        <th scope="col" class="text-end">Uygunsuzluk</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach (var question in Model.Survey.Questions)
+                    {
+                        <tr>
+                            <td>@question.Name</td>
+                            <td>
+
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="true" name="QuestionAnswers[@question.Id]" id="flexRadioDefault1-@question.Id"
+                                           @(question.Answers.FirstOrDefault().isSuccess ? "checked" : "")>
+                                    <label class="form-check-label" for="flexRadioDefault1-@question.Id">
+                                        Evet
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" value="false" name="QuestionAnswers[@question.Id]" id="flexRadioDefault2-@question.Id"
+                                           @(question.Answers.FirstOrDefault().isSuccess ? "" : "checked")>
+                                    <label class="form-check-label" for="flexRadioDefault2-@question.Id">
+                                        Hayır
+                                    </label>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@question.Id">
+                                        Düzenle
+                                    </button>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="staticBackdrop-@question.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@question.Id" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="staticBackdropLabel-@question.Id">Uygunsuzluk Bildir</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="cameraContainer-@question.Id" class="camera-container">
+                                                    <input id="capturedPhotoHidden-@question.Id" type="hidden" name="QuestionPhotos[@question.Id]" value="@(question.Answers?.FirstOrDefault()?.Photo == null ? "":@question.Answers?.FirstOrDefault()?.Photo)" />
+                                                    <img id="capturedPhoto-@question.Id" src="@(question.Answers?.FirstOrDefault()?.Photo == null ? "" : @question.Answers?.FirstOrDefault()?.Photo)" style="@(question.Answers?.FirstOrDefault()?.Photo == null ? "display: none;" : "")" alt="Captured Photo">
+                                                </div>
+                                                <button type="button" class="btn btn-primary" id="openCameraBtn-@question.Id">Kamerayı Aç</button>
+                                                <button type="button" class="btn btn-primary" id="takePhotoBtn-@question.Id">Fotoğraf Çek</button>
+                                                <div class="mt-5">
+                                                    <label for="description-@question.Id" class="form-label">Açıklama</label>
+                                                    <textarea class="form-control" id="description-@question.Id" placeholder="Enter description..."></textarea>
+                                                </div>
+
+                                                <div class="form-floating">
+                                                    <select class="form-select" id="floatingSelect" name="QuestionUsers[@question.Id]" aria-label="Floating label select example">
+                                                        <option selected>@Model.AppUsers.Where(au => au.Id == question.Answers?.FirstOrDefault()?.EmployeeId).FirstOrDefault()?.UserName</option>
+                                                        @foreach (var item in Model.AppUsers)
+                                                        {
+                                                            @if (item.Facility == Model.Survey.AppUsers.FirstOrDefault().Facility)
+                                                            {
+                                                                <option value="@item.Id">@item.UserName</option>
+                                                            }
+
+                                                        }
+                                                    </select>
+                                                    <label for="floatingSelect">Atanacak kişiyi seçiniz.</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="understoodBtn-@question.Id">Tamam</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </div>
+</form>
+
+<!-- Modal -->
+<div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="successModalLabel">İşlem Başarılı</h1>
+            </div>
+            <div class="modal-body">
+                Değişiklikler başarıyla kaydedildi.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@foreach (var question in Model.Survey.Questions)
+{
+    <script>
+        // Kamera aç butonuna tıklanıldığında
+        document.getElementById('openCameraBtn-@question.Id').addEventListener('click', function () {
+            // Kamera açma işlemleri...
+            var imgElement = document.getElementById('capturedPhoto-@question.Id');
+            imgElement.src = '/img/';
+            imgElement.style.display = 'none';
+
+            // Kamera stream'ini almak için gerekli işlemler yapılır
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    var video = document.createElement('video');
+                    video.setAttribute('id', 'cameraStream-@question.Id');
+                    video.srcObject = stream;
+                    document.getElementById('cameraContainer-@question.Id').appendChild(video);
+                    video.play();
+                    videoStream = stream; // Save reference to the stream
+
+                    document.getElementById('cameraContainer-@question.Id').style.display = 'flex';
+                    document.getElementById('openCameraBtn-@question.Id').disabled = true;
+                })
+                .catch(function (err) {
+                    console.error('Kamera açılamadı: ', err);
+                });
+        });
+
+        // Modal kapatıldığında
+        document.getElementById('staticBackdrop-@question.Id').addEventListener('hidden.bs.modal', function () {
+            // Kamera kapatma işlemleri...
+            if (videoStream) {
+                videoStream.getTracks().forEach(track => {
+                    track.stop();
+                });
+            }
+
+            var cameraContainer = document.getElementById('cameraContainer-@question.Id');
+            var videoElements = cameraContainer.querySelectorAll('video');
+
+            videoElements.forEach(function (videoElement) {
+                // Her bir video elementini kaldır
+                cameraContainer.removeChild(videoElement);
+            });
+        });
+
+        // Fotoğraf çek butonuna tıklanıldığında
+        document.getElementById('takePhotoBtn-@question.Id').addEventListener('click', function () {
+            // Fotoğraf çekme işlemleri...
+            var canvas = document.createElement('canvas');
+            var video = document.getElementById('cameraStream-@question.Id');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Canvas içeriği base64 formatına dönüştürülür
+            var imageData = canvas.toDataURL('image/jpeg');
+            var base64Data = imageData.split(",")[1];
+
+            var requestData = { image: base64Data };
+
+            // Burada imageData'yı kullanarak isteği göndermek gerekiyor
+            // Örneğin:
+            fetch('http://localhost:5231/ImageUpload', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+                .then(function (response) {
+                    if (response.ok) {
+                        response.text().then(function (fileName) {
+                            console.log('Fotoğraf başarıyla yüklendi. URL:', fileName);
+
+                            if (videoStream) {
+                                videoStream.getTracks().forEach(track => {
+                                    track.stop();
+                                });
+                            }
+
+                            var cameraContainer = document.getElementById('cameraContainer-@question.Id');
+                            var videoElements = cameraContainer.querySelectorAll('video');
+
+                            videoElements.forEach(function (videoElement) {
+                                // Her bir video elementini kaldır
+                                cameraContainer.removeChild(videoElement);
+                            });
+
+                            var imgElement = document.getElementById('capturedPhoto-@question.Id');
+                            imgElement.src = '/img/' + fileName;
+                            imgElement.style.display = 'block';
+
+                            var imgHiddenElement = document.getElementById('capturedPhotoHidden-@question.Id');
+                            imgHiddenElement.setAttribute("value", '/img/' + fileName)
+
+                            document.getElementById('openCameraBtn-@question.Id').disabled = false;
+                        });
+
+                    } else {
+                        console.error('Hata:', response.statusText);
+                    }
+                })
+                .catch(function (error) {
+                    console.error('Hata:', error);
+                });
+        });
+    </script>
+}
+
+

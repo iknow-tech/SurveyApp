@@ -1,0 +1,40 @@
+﻿@model SurveyAssignListModel
+
+<div class="mt-5 col-md-8 offset-md-2">
+    @foreach (var facility in Model.Facilities)
+    {
+        <div class="shadow p-3 rounded my-5">
+            <div class="table-responsive">
+                <table class="table table-mid">
+                    <thead>
+                        <tr>
+                            <th>
+                                @facility.Name, @facility.City, @facility.Local
+                                <a href="/facilities/@facility.Id/addUser/" class="btn btn-sm btn-success">Denetleyici Ekle/Çıkar</a>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th scope="col">
+                                Ad Soyad
+                            </th>
+                            <th>Kullanıcı Adı</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        @foreach (var user in facility.AppUsers)
+                        {
+                            <tr>
+                                <td>@user.FullName</td>
+                                <td>@user.UserName</td>
+                                <td class="text-end">
+                                    <a href="/surveyAssign/edit/@user.Id" class="btn btn-sm btn-primary">Denetim Ekle/Çıkar</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>

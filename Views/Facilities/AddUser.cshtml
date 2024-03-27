@@ -1,0 +1,61 @@
+﻿@model FacilityAddUserModel
+
+<div class="row mt-5">
+    <h3 class="text-center">Tesis Denetleyici Formu</h3>
+    <h5 class="mt-5">Tesis Adı: @Model.Name</h5>
+    <hr />
+    <div class="col-md-6 border-end border-dark">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Denetleyici</th>
+                    <th scope="col"></th>
+                    <th scope="col">Mevcut Tesis</th>
+
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.UserName</td>
+                        <td>@user.FullName</td>
+                        @if (user.Facility != null)
+                        {
+                            <td>@user.Facility.Name, @user.Facility.City, @user.Facility.Local</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td class="text-end">
+                            <a href="/facilities/@Model.Id/addUser/@user.Id" class="btn btn-sm btn-primary">Ekle</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6 border-dark">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Tesis Denetleyicileri</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var facilityUser in Model.FacilityUsers)
+                {
+                    <tr>
+                        <td>@facilityUser.UserName</td>
+                        <td>@facilityUser.FullName</td>
+                        <td class="text-end">
+                            <a href="/facilities/@Model.Id/removeUser/@facilityUser.Id" class="btn btn-sm btn-danger">Çıkar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

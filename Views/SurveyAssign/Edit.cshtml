@@ -1,0 +1,47 @@
+﻿@model SurveyAssignEditModel
+
+<div class="row mt-5">
+    <h3 class="text-center">Denetim Atama Formu</h3>
+    <h5 class="mt-5">Kullanıcı Adı: @Model.AppUser.FullName - (@Model.AppUser.UserName)</h5>
+    <hr />
+    <div class="col-md-6 border-end border-dark">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Denetimler</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var survey in Model.Surveys)
+                {
+                    <tr>
+                        <td>@survey.Name</td>
+                        <td class="text-end">
+                            <a href="/surveyAssign/@Model.Id/addSurvey/@survey.Id" class="btn btn-sm btn-primary">Ekle</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6 border-dark">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Atanan Denetimler</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var userSurvey in Model.UserSurveys)
+                {
+                    <tr>
+                        <td>@userSurvey.Name</td>
+                        <td class="text-end">
+                            <a href="/surveyAssign/@Model.Id/removeSurvey/@userSurvey.Id" class="btn btn-sm btn-danger">Çıkar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

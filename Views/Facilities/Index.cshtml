@@ -1,0 +1,30 @@
+﻿@model List<FacilityListModel>
+
+<div class="mt-5 col-md-8 offset-md-2">
+    <div class="table-responsive">
+        <table class="table table-mid">
+            <thead>
+                <tr>
+                    <th scope="col">Tesis Adı</th>
+                    <th scope="col">Tesis Şehri</th>
+                    <th scope="col">Tesis Bölgesi</th>
+                    <th class="text-end"><a href="/facilities/create" class="btn btn-sm btn-success">Tesis Ekle</a></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                @foreach (var facility in Model)
+                {
+                    <tr>
+                        <td>@facility.Name</td>
+                        <td>@facility.City</td>
+                        <td>@facility.Local</td>
+                        <td class="text-end">
+                            <a href="/facilities/edit/@facility.Id" class="btn btn-sm btn-primary">Düzenle</a>
+                            <a href="/facilities/delete/@facility.Id" class="btn btn-sm btn-danger">Sil</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

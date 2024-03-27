@@ -1,0 +1,31 @@
+﻿@model SurveyCreateModel
+
+<div class="mt-5 shadow rounded p-3 col-md-6 offset-md-3">
+    <h3 class="text-center">Denetim Ekleme Formu</h3>
+    <hr />
+    <form asp-action="Create" asp-controller="Surveys" method="post">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Denetim Adı</label>
+            <input type="text" class="form-control" asp-for="Name">
+        </div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </form>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="successModalLabel">İşlem Başarılı</h1>
+            </div>
+            <div class="modal-body">
+                Denetim başarıyla eklendi.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">Tamam</button>
+            </div>
+        </div>
+    </div>
+</div>
+
