@@ -253,13 +253,14 @@
                                                                 <input id="capturedPhotoHidden-@question.Id" type="hidden" name="QuestionPhotos[@question.Id]" value="@(question.Answers?.FirstOrDefault()?.Photo == null ? "":@question.Answers?.FirstOrDefault()?.Photo)" />
                                                                 <img id="capturedPhoto-@question.Id" src="@(question.Answers?.FirstOrDefault()?.Photo == null ? "" : @question.Answers?.FirstOrDefault()?.Photo)" style="@(question.Answers?.FirstOrDefault()?.Photo == null ? "display: none;" : "")" alt="Captured Photo">
                                                             </div>
-                                                            <button type="button" class="btn btn-primary" id="openCameraBtn-@question.Id">Kamerayı Aç</button>
-                                                            <button type="button" class="btn btn-primary" id="takePhotoBtn-@question.Id">Fotoğraf Çek</button>
+                                                            <div class="my-5">
+                                                                <button type="button" class="btn btn-primary" id="openCameraBtn-@question.Id">Kamerayı Aç</button>
+                                                                <button type="button" class="btn btn-primary" id="takePhotoBtn-@question.Id">Fotoğraf Çek</button>
+                                                            </div>
                                                             <div class="my-5">
                                                                 <label for="description-@question.Id" class="form-label">Açıklama</label>
                                                                 <textarea class="form-control" id="description-@question.Id" name="QuestionDescriptions[@question.Id]" placeholder="Açıklama giriniz...">@((question.Answers?.FirstOrDefault()?.Description == null ? "" : @question.Answers?.FirstOrDefault()?.Description))</textarea>
                                                             </div>
-
                                                             <div class="form-floating">
                                                                 <select class="form-select" id="floatingSelect" name="QuestionUsers[@question.Id]" aria-label="Floating label select example">
 
@@ -283,7 +284,6 @@
                                                                 </select>
                                                                 <label for="floatingSelect">Atanacak kişiyi seçiniz.</label>
                                                             </div>
-
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="understoodBtn-@question.Id">Tamam</button>
