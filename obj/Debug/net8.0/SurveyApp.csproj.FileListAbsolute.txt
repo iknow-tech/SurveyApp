@@ -129,3 +129,4 @@ C:\Users\burak\source\repos\SurveyApp\obj\Debug\net8.0\refint\SurveyApp.dll
 C:\Users\burak\source\repos\SurveyApp\obj\Debug\net8.0\SurveyApp.pdb
 C:\Users\burak\source\repos\SurveyApp\obj\Debug\net8.0\SurveyApp.genruntimeconfig.cache
 C:\Users\burak\source\repos\SurveyApp\obj\Debug\net8.0\ref\SurveyApp.dll
+C:\Users\burak\source\repos\SurveyApp\obj\Debug\net8.0\SurveyApp.sourcelink.json
